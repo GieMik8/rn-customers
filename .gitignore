@@ -1,4 +1,8 @@
 node_modules
+.vscode
+build/
 
 # iOS
-ios/build
+
+# Android
+.gradle

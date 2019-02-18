@@ -4,6 +4,9 @@
   "private": true,
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
+    "android": "react-native run-android",
+    "android-build": "cd android && ./gradlew assembleRelease && cd ..",
+    "ios": "react-native run-ios --simulator='iPhone 7 Plus'",
     "test": "jest",
     "tsc": "tsc"
   },
@@ -20,8 +23,12 @@
     "babel-jest": "24.1.0",
     "jest": "24.1.0",
     "metro-react-native-babel-preset": "0.51.1",
+    "prettier": "^1.16.4",
     "react-test-renderer": "16.6.3",
     "ts-jest": "23.10.5",
+    "tslint": "^5.12.1",
+    "tslint-config-airbnb": "^5.11.1",
+    "tslint-react": "^3.6.0",
     "typescript": "3.3.3"
   },
   "jest": {

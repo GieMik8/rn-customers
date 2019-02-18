@@ -1,18 +1,19 @@
 import React, { Component } from 'react'
+import { Provider } from 'react-redux'
 import { StyleSheet, Text, View } from 'react-native'
 
-import { genId } from '@/utils'
-
-console.log(genId())
+import { store } from '@/store'
 
 interface Props {}
 export default class App extends Component<Props> {
   render() {
     return (
-      <View style={styles.container}>
-        <Text style={styles.welcome}>Welcome to React Native!</Text>
-        <Text style={styles.instructions}>To get started, edit App.tsx</Text>
-      </View>
+      <Provider store={store}>
+        <View style={styles.container}>
+          <Text style={styles.welcome}>Welcome to React Native!</Text>
+          <Text style={styles.instructions}>To get started, edit App.tsx</Text>
+        </View>
+      </Provider>
     )
   }
 }

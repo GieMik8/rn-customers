@@ -1,0 +1,138 @@
+import * as React from 'react'
+import { ListView } from 'react-native'
+import {
+  Button,
+  Icon,
+  List,
+  ListItem,
+  Text,
+  Left,
+  Body,
+  View,
+} from 'native-base'
+import _ from 'lodash'
+
+import { Customer } from '@/types'
+
+type Props = {
+  customers: Customer[]
+  onRemove: (id: string) => void
+  onEdit: (id: string) => void
+}
+
+type State = {
+  basic: boolean
+  listViewData: Customer[]
+}
+
+export default class CustomersList extends React.Component<Props, State> {
+  listData = new ListView.DataSource({
+    rowHasChanged: () => false,
+  })
+  constructor(props: Props) {
+    super(props)
+    this.listData = new ListView.DataSource({
+      rowHasChanged: (r1, r2) => r1.id !== r2.id,
+    })
+    this.state = {
+      basic: true,
+      listViewData: props.customers,
+    }
+  }
+
+  removeCustomer(id: string) {
+    this.props.onRemove(id)
+  }
+
+  editCustomer(id: string) {
+    this.props.onEdit(id)
+  }
+
+  deleteRow(
+    customer: Customer,
+    secId: React.ReactText,
+    rowId: React.ReactText,
+    rowMap: any
+  ) {
+    rowMap[`${secId}${rowId}`].props.closeRow()
+    const newData = [...this.state.listViewData]
+    newData.splice(+rowId, 1)
+    this.removeCustomer(customer.id)
+    this.setState({ listViewData: newData })
+  }
+
+  renderRow = (customer: Customer) => (
+    <ListItem
+      avatar
+      style={{
+        paddingHorizontal: 20,
+        paddingVertical: 6,
+      }}
+      onPress={this.editCustomer.bind(this, customer.id)}
+    >
+      <Left
+        style={{
+          width: 30,
+          justifyContent: 'center',
+        }}
+      >
+        <Icon name="user" type="FontAwesome5" />
+      </Left>
+      <Body>
+        <Text style={{}}>
+          {customer.name} {customer.surname}
+        </Text>
+        <Text note>{customer.email}</Text>
+      </Body>
+    </ListItem>
+  )
+
+  renderLeftHiddenRow = (customer: Customer) => (
+    <Button full onPress={this.editCustomer.bind(this, customer.id)}>
+      <Icon active name="information-circle" />
+    </Button>
+  )
+
+  renderRightHiddenRow = (
+    customer: Customer,
+    secId: React.ReactText,
+    rowId: React.ReactText,
+    rowMap: object
+  ) => {
+    console.log({ customer, secId, rowId, rowMap })
+    return (
+      <Button
+        full
+        danger
+        onPress={this.deleteRow.bind(this, customer, secId, rowId, rowMap)}
+      >
+        <Icon active name="trash" />
+      </Button>
+    )
+  }
+
+  render() {
+    return (
+      <View style={{ marginTop: 25, marginBottom: 55 }}>
+        <List
+          leftOpenValue={60}
+          rightOpenValue={-65}
+          dataSource={this.listData.cloneWithRows(this.state.listViewData)}
+          renderRow={this.renderRow}
+          renderLeftHiddenRow={this.renderLeftHiddenRow}
+          renderRightHiddenRow={this.renderRightHiddenRow}
+        />
+        <View
+          style={{
+            marginHorizontal: 20,
+            marginmarginTop: 40,
+          }}
+        >
+          <Text note style={{ textAlign: 'right' }}>
+            customers: {this.state.listViewData.length}
+          </Text>
+        </View>
+      </View>
+    )
+  }
+}

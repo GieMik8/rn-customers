@@ -4,7 +4,6 @@ import { connect } from 'react-redux'
 import { NavigationScreenProps } from 'react-navigation'
 
 import { RootState, RootAction } from '@/store'
-import { getCustomers } from '@/modules/customers/selectors'
 
 type StateProps = {}
 

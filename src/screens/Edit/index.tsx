@@ -14,6 +14,12 @@ type Props = StateProps & DispatchProps & NavigationScreenProps
 class EditScreen extends React.Component<Props> {
   goBack = () => this.props.navigation.goBack()
 
+  componentDidMount() {
+    const { params } = this.props.navigation.state
+    if (!params) return console.log('OMG')
+    console.log('edit', params.id)
+  }
+
   render() {
     return (
       <View>

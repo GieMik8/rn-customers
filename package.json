@@ -7,10 +7,15 @@
     "android": "react-native run-android",
     "android-build": "cd android && ./gradlew assembleRelease && cd ..",
     "ios": "react-native run-ios --simulator='iPhone 7 Plus'",
+    "clean": "rm -rf $TMPDIR/react-native-packager-cache-* && rm -rf $TMPDIR/metro-bundler-cache-* && rm -rf ./ios/Build && rm -rf ./android/app/build && npm run android-clean",
+    "android-clean": "cd android && ./gradlew clean && cd ..",
     "test": "jest",
     "tsc": "tsc"
   },
   "dependencies": {
+    "immutable": "^4.0.0-rc.12",
+    "lodash": "^4.17.11",
+    "native-base": "^2.11.0",
     "normalizr": "^3.3.0",
     "react": "16.6.3",
     "react-native": "0.58.4",
@@ -25,6 +30,7 @@
   },
   "devDependencies": {
     "@types/jest": "24.0.6",
+    "@types/lodash": "^4.14.121",
     "@types/react": "16.8.3",
     "@types/react-native": "0.57.37",
     "@types/react-navigation": "^3.0.2",

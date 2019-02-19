@@ -1,25 +1,26 @@
 {
-    "defaultSeverity": "error",
-    "extends": ["tslint-react", "tslint-config-airbnb"],
-    "jsRules": {},
-    "rules": {
-      "semicolon": [true, "never"],
-      "import-name": false,
-      "trailing-comma": [
-        true,
-        {
-          "singleline": "never",
-          "multiline": {
-            "objects": "always",
-            "arrays": "always",
-            "functions": "never",
-            "typeLiterals": "ignore"
-          }
+  "defaultSeverity": "error",
+  "extends": ["tslint-react", "tslint-config-airbnb"],
+  "jsRules": {},
+  "rules": {
+    "semicolon": [true, "never"],
+    "import-name": false,
+    "trailing-comma": [
+      true,
+      {
+        "singleline": "never",
+        "multiline": {
+          "objects": "always",
+          "arrays": "always",
+          "functions": "never",
+          "typeLiterals": "ignore"
         }
-      ],
-      "no-unused-variable": true,
-      "prefer-array-literal": [true, { "allow-type-parameters": true }]
-    },
-    "rulesDirectory": []
-  }
-  
+      }
+    ],
+    "no-unused-variable": true,
+    "prefer-array-literal": [true, { "allow-type-parameters": true }],
+    "jsx-boolean-value": [true, "never"],
+    "jsx-no-multiline-js": false
+  },
+  "rulesDirectory": []
+}

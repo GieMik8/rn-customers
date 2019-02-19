@@ -1,29 +1,40 @@
 import React from 'react'
-import {
-  List,
-  ListItem,
-  Thumbnail,
-  Text,
-  Body,
-  Right,
-  Left,
-  Icon,
-} from 'native-base'
+import { GestureResponderEvent } from 'react-native'
+import { ListItem, Text, Body, Left, Icon } from 'native-base'
 
 import { Customer } from '@/types'
 
-const customerItem = (customer: Customer) => (
-  <ListItem avatar>
-    <Left>
-      <Icon style={{ fontSize: 15 }} name="user" type="FontAwesome5" />
+type Props = {
+  customer: Customer
+  onPress: (event: GestureResponderEvent) => void
+}
+
+const customerItem: React.FunctionComponent<Props> = ({
+  onPress,
+  customer,
+}) => (
+  <ListItem
+    avatar
+    style={{
+      paddingHorizontal: 20,
+      paddingVertical: 6,
+    }}
+    onPress={onPress}
+  >
+    <Left
+      style={{
+        width: 30,
+        justifyContent: 'center',
+      }}
+    >
+      <Icon name="user" type="FontAwesome5" />
     </Left>
     <Body>
-      <Text>{customer.name}</Text>
-      <Text note>{customer.surname}</Text>
+      <Text style={{}}>
+        {customer.name} {customer.surname}
+      </Text>
+      <Text note>{customer.email}</Text>
     </Body>
-    <Right>
-      <Text note>3:43 pm</Text>
-    </Right>
   </ListItem>
 )
 

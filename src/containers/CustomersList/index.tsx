@@ -1,18 +1,9 @@
 import * as React from 'react'
 import { ListView } from 'react-native'
-import {
-  Button,
-  Icon,
-  List,
-  ListItem,
-  Text,
-  Left,
-  Body,
-  View,
-} from 'native-base'
-import _ from 'lodash'
+import { Button, Icon, List, Text, View } from 'native-base'
 
 import { Customer } from '@/types'
+import { CustomerItem } from '@/components'
 
 type Props = {
   customers: Customer[]
@@ -45,6 +36,7 @@ export default class CustomersList extends React.Component<Props, State> {
   }
 
   editCustomer(id: string) {
+    console.log(id)
     this.props.onEdit(id)
   }
 
@@ -62,29 +54,10 @@ export default class CustomersList extends React.Component<Props, State> {
   }
 
   renderRow = (customer: Customer) => (
-    <ListItem
-      avatar
-      style={{
-        paddingHorizontal: 20,
-        paddingVertical: 6,
-      }}
+    <CustomerItem
       onPress={this.editCustomer.bind(this, customer.id)}
-    >
-      <Left
-        style={{
-          width: 30,
-          justifyContent: 'center',
-        }}
-      >
-        <Icon name="user" type="FontAwesome5" />
-      </Left>
-      <Body>
-        <Text style={{}}>
-          {customer.name} {customer.surname}
-        </Text>
-        <Text note>{customer.email}</Text>
-      </Body>
-    </ListItem>
+      customer={customer}
+    />
   )
 
   renderLeftHiddenRow = (customer: Customer) => (

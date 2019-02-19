@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import { NavigationScreenProps } from 'react-navigation'
 
 import { RootState, RootAction } from '@/store'
+import { getCustomers } from '@/modules/customers/selectors'
 
 type StateProps = {}
 
@@ -11,14 +12,14 @@ type DispatchProps = {}
 
 type Props = StateProps & DispatchProps & NavigationScreenProps
 
-class EditScreen extends React.Component<Props> {
+class LocationModal extends React.Component<Props> {
   goBack = () => this.props.navigation.goBack()
 
   render() {
     return (
       <View>
-        <Text>Edit Customer</Text>
-        <Button title="Go To Customers" onPress={this.goBack} />
+        <Text>Close modal</Text>
+        <Button title="Close modal" onPress={this.goBack} />
       </View>
     )
   }
@@ -33,4 +34,4 @@ const mapDispatchToProps = (
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(EditScreen)
+)(LocationModal)

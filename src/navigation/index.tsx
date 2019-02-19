@@ -1,13 +1,38 @@
 import { createStackNavigator, createAppContainer } from 'react-navigation'
 
-import { MainScreen, EditScreen } from '@/screens'
+import { CustomersScreen, EditScreen, CreateScreen } from '@/screens'
+import { LocationModal } from '@/modals'
 
-const appNavigator = createStackNavigator(
+const mainStack = createStackNavigator(
   {
-    Main: MainScreen,
-    Edit: EditScreen,
+    Customers: {
+      screen: CustomersScreen,
+    },
+    Edit: {
+      screen: EditScreen,
+    },
+    Create: {
+      screen: CreateScreen,
+    },
   },
-  { initialRouteName: 'Main' }
+  {
+    initialRouteName: 'Customers',
+  }
 )
 
-export default createAppContainer(appNavigator)
+const rootStack = createStackNavigator(
+  {
+    Main: {
+      screen: mainStack,
+    },
+    LocationModal: {
+      screen: LocationModal,
+    },
+  },
+  {
+    mode: 'modal',
+    headerMode: 'none',
+  }
+)
+
+export default createAppContainer(rootStack)

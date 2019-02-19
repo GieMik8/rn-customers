@@ -13,7 +13,7 @@ type StateProps = {
 }
 
 type DispatchProps = {
-  request: (para: string) => void
+  request: (param: string) => void
 }
 
 type Props = StateProps & DispatchProps & NavigationScreenProps
@@ -24,12 +24,14 @@ class MainScreen extends React.Component<Props> {
   }
 
   goToEdit = () => this.props.navigation.navigate('Edit')
+  goToCreate = () => this.props.navigation.navigate('Create')
 
   render() {
     return (
       <View>
-        <Text>Main Screen</Text>
-        <Button title="Go To Edit" onPress={this.goToEdit} />
+        <Text>Customers</Text>
+        <Button title="Edit Customer" onPress={this.goToEdit} />
+        <Button title="Create Customer" onPress={this.goToCreate} />
       </View>
     )
   }
@@ -42,7 +44,7 @@ const mapStateToProps = (state: RootState): StateProps => ({
 const mapDispatchToProps = (
   dispatch: React.Dispatch<RootAction>
 ): DispatchProps => ({
-  request: para => dispatch(fetchCustomers.request(para)),
+  request: param => dispatch(fetchCustomers.request(param)),
 })
 
 export default connect(

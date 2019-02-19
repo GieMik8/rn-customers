@@ -1,7 +1,7 @@
 import { applyMiddleware, createStore, combineReducers, compose } from 'redux'
 import { persistStore, persistReducer } from 'redux-persist'
 import { AsyncStorage } from 'react-native'
-import { createEpicMiddleware, combineEpics } from 'redux-observable'
+import { createEpicMiddleware, combineEpics, Epic } from 'redux-observable'
 import { ActionType, StateType } from 'typesafe-actions'
 
 import customersReducer from '@/modules/customers/reducers'
@@ -58,6 +58,7 @@ epicMiddleware.run(rootEpic)
 
 export type RootAction = ActionType<typeof rootActions>
 export type RootState = StateType<typeof rootReducer>
+export type RootEpic = Epic<RootAction, RootAction, RootState>
 
 export const persistor = persistStore(store, {}, () => {
   store.dispatch({ type: 'REHYDRATED' })

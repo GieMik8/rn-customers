@@ -4,6 +4,7 @@ import { combineReducers } from 'redux'
 import { getType, StateType } from 'typesafe-actions'
 import { normalize } from 'normalizr'
 
+import { genId } from '@/utils'
 import { CustomersAction } from '@/store/index'
 import { Customer } from '@/types'
 import * as actions from './actions'
@@ -11,13 +12,7 @@ import { customerSchema } from './schemas'
 
 const plainCustomers: Customer[] = [
   {
-    id: '1',
-    name: 'Ieva',
-    surname: 'Šeikytė',
-    email: 'ieva.seikyte@gmail.com',
-  },
-  {
-    id: '2',
+    id: genId(),
     name: 'Giedrius',
     surname: 'Mikoliunas',
     email: 'giemik8@gmail.com',

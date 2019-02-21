@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { FunctionComponent } from 'react'
 import { GestureResponderEvent } from 'react-native'
 import { ListItem, Text, Body, Left, Icon } from 'native-base'
 
@@ -9,10 +9,7 @@ type Props = {
   onPress: (event: GestureResponderEvent) => void
 }
 
-const customerItem: React.FunctionComponent<Props> = ({
-  onPress,
-  customer,
-}) => (
+const customerItem: FunctionComponent<Props> = ({ onPress, customer }) => (
   <ListItem
     avatar
     style={{

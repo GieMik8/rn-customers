@@ -62,7 +62,7 @@ export default class CustomersList extends React.Component<Props, State> {
 
   renderLeftHiddenRow = (customer: Customer) => (
     <Button full onPress={this.editCustomer.bind(this, customer.id)}>
-      <Icon active name="information-circle" />
+      <Icon active name="user-edit" type="FontAwesome5" />
     </Button>
   )
 
@@ -79,7 +79,7 @@ export default class CustomersList extends React.Component<Props, State> {
         danger
         onPress={this.deleteRow.bind(this, customer, secId, rowId, rowMap)}
       >
-        <Icon active name="trash" />
+        <Icon active name="trash" type="FontAwesome5" />
       </Button>
     )
   }
@@ -98,7 +98,7 @@ export default class CustomersList extends React.Component<Props, State> {
         <View
           style={{
             marginHorizontal: 20,
-            marginmarginTop: 40,
+            marginTop: 25,
           }}
         >
           <Text note style={{ textAlign: 'right' }}>

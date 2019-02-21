@@ -12,7 +12,6 @@ export const fetchCustomers: RootEpic = (action$, state$) =>
     tap(action => console.log('customers', state$, action.payload)),
     switchMap(() =>
       timer(3000).pipe(
-        tap(mhm => console.log({ mhm })),
         switchMap(() => of(actions.fetchCustomers.success('as')))
       )
     )

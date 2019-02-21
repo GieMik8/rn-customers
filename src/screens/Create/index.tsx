@@ -1,9 +1,20 @@
 import * as React from 'react'
-import { Text, View, Button } from 'react-native'
 import { connect } from 'react-redux'
 import { NavigationScreenProps } from 'react-navigation'
+import {
+  Container,
+  Header,
+  Button,
+  Body,
+  Left,
+  Icon,
+  Title,
+  Content,
+} from 'native-base'
 
 import { RootState, RootAction } from '@/store'
+import { CustomerForm } from '@/containers'
+import { Customer } from '@/types'
 
 type StateProps = {}
 
@@ -11,46 +22,39 @@ type DispatchProps = {}
 
 type Props = StateProps & DispatchProps & NavigationScreenProps
 
-type ScreenParams = {
-  openLocationModal: () => void
-}
-
 class CreateScreen extends React.Component<Props> {
-  static navigationOptions = ({
-    navigation,
-  }: NavigationScreenProps<ScreenParams>) => {
-    const params = navigation.state.params || { openLocationModal: () => {} }
-
-    return {
-      headerTitle: <Text>Create customer</Text>,
-      headerRight: (
-        <Button
-          onPress={params.openLocationModal}
-          title="Find location"
-          color="red"
-        />
-      ),
-    }
-  }
-
-  componentWillMount() {
-    this.props.navigation.setParams({
-      openLocationModal: this.openLocationModal,
-    })
-  }
-
   goBack = () => this.props.navigation.goBack()
 
   openLocationModal = () => {
     this.props.navigation.navigate('LocationModal')
   }
 
+  createCustomer = (customer: Customer) => {
+    console.log('create', customer)
+  }
+
   render() {
     return (
-      <View>
-        <Text>Create</Text>
-        <Button title="Go Back" onPress={this.goBack} />
-      </View>
+      <Container>
+        <Header>
+          <Left>
+            <Button transparent onPress={this.goBack}>
+              <Icon
+                style={{ fontSize: 20, color: '#495057' }}
+                name="chevron-left"
+                type="FontAwesome5"
+              />
+            </Button>
+          </Left>
+          <Body>
+            <Title>Create Customer</Title>
+          </Body>
+          {/* <Right /> */}
+        </Header>
+        <Content contentContainerStyle={{ margin: 20 }}>
+          <CustomerForm onSubmit={this.createCustomer} />
+        </Content>
+      </Container>
     )
   }
 }

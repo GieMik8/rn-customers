@@ -16,7 +16,7 @@ const mainStack = createStackNavigator(
     },
   },
   {
-    initialRouteName: 'Create',
+    initialRouteName: 'Customers',
     headerMode: 'none',
   }
 )

@@ -2,7 +2,8 @@ import { persistReducer } from 'redux-persist'
 import { AsyncStorage } from 'react-native'
 import { combineReducers } from 'redux'
 import { getType, StateType } from 'typesafe-actions'
-import { normalize } from 'normalizr'
+import { normalize, denormalize } from 'normalizr'
+import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2'
 
 import Utils from '@/utils'
 import { CustomersAction } from '@/store/index'
@@ -11,12 +12,7 @@ import * as actions from './actions'
 import { customerSchema } from './schemas'
 
 const plainCustomers: Customer[] = [
-  {
-    id: Utils.genId(),
-    name: 'Giedrius',
-    surname: 'Mikoliunas',
-    email: 'giemik8@gmail.com',
-  },
+  new Customer(Utils.genId(), 'Giedrius', 'Mikoliunas', 'giemik8@gmail.com'),
 ]
 
 type CustomerMap = {
@@ -37,12 +33,16 @@ const data = (
   action: CustomersAction
 ): DataState => {
   switch (action.type) {
-    case getType(actions.ready):
-      return dataState
-    case getType(actions.example):
-      return dataState
+    case getType(actions.create):
+      const plainCustomers = denormalize(
+        state.result,
+        customerSchema,
+        state.entities
+      )
+      plainCustomers.push(action.payload)
+      return normalize(plainCustomers, customerSchema)
     default:
-      return dataState
+      return state
   }
 }
 
@@ -55,12 +55,7 @@ const uiState = {
 }
 
 const ui = (state: UiState = uiState, action: CustomersAction) => {
-  switch (action.type) {
-    case getType(actions.ready):
-      return state
-    default:
-      return state
-  }
+  return state
 }
 
 const customersReducer = combineReducers({ data, ui })
@@ -69,6 +64,10 @@ const persistConfig = {
   key: 'customers',
   version: 1,
   storage: AsyncStorage,
+  stateReconciler: autoMergeLevel2,
+  whitelist: ['data', 'ui'],
+  // https://github.com/rt2zz/redux-persist/issues/824 nested whitelist doesnt work without this
+  // blacklist: ['data', 'ui'],
 }
 
 export type CustomersState = StateType<typeof customersReducer>

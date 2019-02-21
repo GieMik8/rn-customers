@@ -3,6 +3,7 @@ import { persistStore, persistReducer } from 'redux-persist'
 import { AsyncStorage } from 'react-native'
 import { createEpicMiddleware, combineEpics, Epic } from 'redux-observable'
 import { ActionType, StateType } from 'typesafe-actions'
+import autoMergeLevel2 from 'redux-persist/es/stateReconciler/autoMergeLevel2'
 
 import Utils from '@/utils'
 import customersReducer from '@/modules/customers/reducers'
@@ -47,6 +48,10 @@ const composeEnhancers =
 const persistConfig = {
   key: 'root',
   storage: AsyncStorage,
+  stateReconciler: autoMergeLevel2,
+  whitelist: ['customers'],
+  // https://github.com/rt2zz/redux-persist/issues/824 nested whitelist doesnt work without this
+  // blacklist: ['customers'],
 }
 
 const pReducer = persistReducer(persistConfig, rootReducer)

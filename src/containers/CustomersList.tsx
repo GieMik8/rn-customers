@@ -1,9 +1,9 @@
-import * as React from 'react'
+import React, { Component, ReactText } from 'react'
 import { ListView } from 'react-native'
 import { Button, Icon, List, Text, View } from 'native-base'
 
 import { Customer } from '@/types'
-import { CustomerItem } from '@/components'
+import { CustomerItem } from '@/ui'
 
 type Props = {
   customers: Customer[]
@@ -16,7 +16,7 @@ type State = {
   listViewData: Customer[]
 }
 
-export default class CustomersList extends React.Component<Props, State> {
+export default class CustomersList extends Component<Props, State> {
   listData = new ListView.DataSource({
     rowHasChanged: () => false,
   })
@@ -31,6 +31,12 @@ export default class CustomersList extends React.Component<Props, State> {
     }
   }
 
+  componentDidUpdate(prevProps: Props) {
+    if (prevProps.customers.length !== this.props.customers.length) {
+      this.setState({ listViewData: this.props.customers })
+    }
+  }
+
   removeCustomer(id: string) {
     this.props.onRemove(id)
   }
@@ -42,8 +48,8 @@ export default class CustomersList extends React.Component<Props, State> {
 
   deleteRow(
     customer: Customer,
-    secId: React.ReactText,
-    rowId: React.ReactText,
+    secId: ReactText,
+    rowId: ReactText,
     rowMap: any
   ) {
     rowMap[`${secId}${rowId}`].props.closeRow()
@@ -68,11 +74,10 @@ export default class CustomersList extends React.Component<Props, State> {
 
   renderRightHiddenRow = (
     customer: Customer,
-    secId: React.ReactText,
-    rowId: React.ReactText,
+    secId: ReactText,
+    rowId: ReactText,
     rowMap: object
   ) => {
-    console.log({ customer, secId, rowId, rowMap })
     return (
       <Button
         full
@@ -85,6 +90,7 @@ export default class CustomersList extends React.Component<Props, State> {
   }
 
   render() {
+    console.log('[CustomerList] render')
     return (
       <View style={{ marginTop: 25, marginBottom: 55 }}>
         <List

@@ -12,13 +12,16 @@ import {
   Content,
 } from 'native-base'
 
+import { create } from '@/modules/customers/actions'
 import { RootState, RootAction } from '@/store'
 import { CustomerForm } from '@/containers'
 import { Customer } from '@/types'
 
 type StateProps = {}
 
-type DispatchProps = {}
+type DispatchProps = {
+  createCustomer: (customer: Customer) => void
+}
 
 type Props = StateProps & DispatchProps & NavigationScreenProps
 
@@ -31,6 +34,7 @@ class CreateScreen extends React.Component<Props> {
 
   createCustomer = (customer: Customer) => {
     console.log('create', customer)
+    this.props.createCustomer(customer)
   }
 
   render() {
@@ -63,7 +67,9 @@ const mapStateToProps = (state: RootState): StateProps => ({})
 
 const mapDispatchToProps = (
   dispatch: React.Dispatch<RootAction>
-): DispatchProps => ({})
+): DispatchProps => ({
+  createCustomer: customer => dispatch(create(customer)),
+})
 
 export default connect(
   mapStateToProps,

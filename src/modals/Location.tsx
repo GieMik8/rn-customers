@@ -1,7 +1,17 @@
 import * as React from 'react'
-import { Text, View, Button } from 'react-native'
 import { connect } from 'react-redux'
 import { NavigationScreenProps } from 'react-navigation'
+import {
+  Container,
+  Header,
+  Item,
+  Icon,
+  Button,
+  Input,
+  Text,
+  View,
+  Content,
+} from 'native-base'
 
 import { RootState, RootAction } from '@/store'
 
@@ -16,10 +26,24 @@ class LocationModal extends React.Component<Props> {
 
   render() {
     return (
-      <View>
-        <Text>Close modal</Text>
-        <Button title="Close modal" onPress={this.goBack} />
-      </View>
+      <Container>
+        <Header searchBar rounded>
+          <Item>
+            <Icon type="FontAwesome5" name="search-location" />
+            <Input placeholder="Search" />
+          </Item>
+          <Button transparent>
+            <Text>Search</Text>
+          </Button>
+        </Header>
+        <Content>
+          <View>
+            <Button onPress={this.goBack}>
+              <Text>Close modal</Text>
+            </Button>
+          </View>
+        </Content>
+      </Container>
     )
   }
 }

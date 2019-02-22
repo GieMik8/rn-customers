@@ -21,7 +21,7 @@ import { RootState, RootAction } from '@/store'
 import { Customer } from '@/types'
 import { getCustomers } from '@/modules/customers/selectors'
 import { CustomersList } from '@/containers'
-import { deleteCustomer } from '@/modules/customers/actions'
+import { initDeleteCustomer } from '@/modules/customers/actions'
 
 type StateProps = {
   customers: Customer[]
@@ -132,7 +132,7 @@ const mapStateToProps = (state: RootState): StateProps => ({
 const mapDispatchToProps = (
   dispatch: React.Dispatch<RootAction>
 ): DispatchProps => ({
-  removeCustomer: (id: string) => dispatch(deleteCustomer(id)),
+  removeCustomer: (id: string) => dispatch(initDeleteCustomer(id)),
 })
 
 export default connect(

@@ -51,10 +51,10 @@ export default class CustomersList extends Component<Props, State> {
     rowMap: any
   ) {
     rowMap[`${secId}${rowId}`].props.closeRow()
-    const newData = [...this.state.listViewData]
-    newData.splice(+rowId, 1)
+    // const newData = [...this.state.listViewData]
+    // newData.splice(+rowId, 1)
     this.removeCustomer(customer.id)
-    this.setState({ listViewData: newData })
+    // this.setState({ listViewData: newData })
   }
 
   renderRow = (customer: Customer) => (

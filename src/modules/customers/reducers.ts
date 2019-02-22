@@ -28,8 +28,8 @@ type DataState = {
 
 const dataState: DataState = normalize(plainCustomers, customerSchema)
 
-const getDenormalized = (state: DataState): Customer[] =>
-  denormalize(state.result, customerSchema, state.entities)
+const getCustomers = ({ result, entities }: DataState): Customer[] =>
+  denormalize(result, customerSchema, entities)
 
 const data = (
   state: DataState = dataState,
@@ -37,20 +37,19 @@ const data = (
 ): DataState => {
   switch (action.type) {
     case getType(actions.create): {
-      const customers = getDenormalized(state)
+      const customers = getCustomers(state)
       customers.push(action.payload)
       return normalize(customers, customerSchema)
     }
     case getType(actions.deleteCustomer): {
-      let customers = getDenormalized(state)
+      let customers = getCustomers(state)
       customers = customers.filter(c => c.id !== action.payload)
       return normalize(customers, customerSchema)
     }
     case getType(actions.edit): {
-      const customers = getDenormalized(state)
+      const customers = getCustomers(state)
       const index = customers.findIndex(c => c.id === action.payload.id)
-      customers[index] = { ...action.payload }
-      console.log(action, index, customers)
+      customers[index] = action.payload
       return normalize(customers, customerSchema)
     }
     default:

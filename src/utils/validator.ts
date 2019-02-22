@@ -41,7 +41,7 @@ class Validator {
         return 'Value must be text'
       case 'max':
         if (this.maxLength(value, options.maxLength)) return true
-        return `Value must be less than ${options.maxLength} less`
+        return `Value must be less than ${options.maxLength}`
       case 'min':
         if (this.minLength(value, options.minLength)) return true
         return `Value must be more than ${options.minLength}`

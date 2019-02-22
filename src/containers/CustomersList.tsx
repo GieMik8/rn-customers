@@ -31,10 +31,8 @@ export default class CustomersList extends Component<Props, State> {
     }
   }
 
-  componentDidUpdate(prevProps: Props) {
-    if (prevProps.customers.length !== this.props.customers.length) {
-      this.setState({ listViewData: this.props.customers })
-    }
+  componentWillReceiveProps(nextProps: Props) {
+    this.setState({ listViewData: nextProps.customers })
   }
 
   removeCustomer(id: string) {
@@ -90,7 +88,7 @@ export default class CustomersList extends Component<Props, State> {
   }
 
   render() {
-    console.log('[CustomerList] render')
+    console.log('[CustomerList] render', this.state.listViewData)
     return (
       <View style={{ marginTop: 25, marginBottom: 55 }}>
         <List

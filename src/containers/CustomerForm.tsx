@@ -56,18 +56,22 @@ export default class CustomerForm extends Component<Props, State> {
   }
 
   submit = (form: FormValue) => {
-    console.log({ form })
     const map: any = {}
     form.map((field: Field<string | Address>) => {
       map[field.name] = field.value
     })
     this.props.onSubmit(
-      new Customer(utils.genId(), map.name, map.surname, map.email, map.address)
+      new Customer(
+        this.state.customer.id || utils.genId(),
+        map.name,
+        map.surname,
+        map.email,
+        map.address
+      )
     )
   }
 
   render() {
-    console.log('[Customer Form] renders')
     return (
       <Form
         purpose={this.state.purpose}

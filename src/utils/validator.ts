@@ -1,6 +1,11 @@
 import _ from 'lodash'
 
-import { ValidationType, ValidationMapType, ValidationTypes } from '@/types'
+import {
+  ValidationType,
+  ValidationMapType,
+  ValidationTypes,
+  Address,
+} from '@/types'
 
 // tslint:disable: max-line-length
 class Validator {
@@ -35,19 +40,32 @@ class Validator {
         return 'Field is required'
       case 'number':
         if (this.isNumber(value)) return true
-        return 'Value must be a number'
+        return "This field's value must be a number"
       case 'text':
         if (this.isString(value)) return true
-        return 'Value must be text'
+        return "This field's value must be text"
       case 'max':
         if (this.maxLength(value, options.maxLength)) return true
-        return `Value must be less than ${options.maxLength}`
+        return `Field\'s values is too long (${options.maxLength})`
       case 'min':
         if (this.minLength(value, options.minLength)) return true
-        return `Value must be more than ${options.minLength}`
+        return `Field\'s value is too short (${options.minLength})`
       default:
         return true
     }
+  }
+
+  public validateAddress(value: Address, required: boolean): true | string {
+    let validated: string | true = true
+    if (
+      required &&
+      this.isEmpty(value.street) &&
+      this.isEmpty(value.city) &&
+      this.isEmpty(value.houseNumber)
+    ) {
+      validated = 'Address is required'
+    }
+    return validated
   }
 
   public validateField(

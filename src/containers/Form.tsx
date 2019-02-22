@@ -1,17 +1,19 @@
 import React, { Component } from 'react'
-import { View, Icon, Button, Text } from 'native-base'
-
-import Utils from '@/utils'
-import { FormField, FormValue, Address, FormPurpose, Field } from '@/types'
-import { TextField } from '@/ui'
+import { View, Icon, Button, Text, Toast } from 'native-base'
 import {
   NativeSyntheticEvent,
   TextInputFocusEventData,
   GestureResponderEvent,
   TouchableOpacity,
+  Keyboard,
 } from 'react-native'
+import { withNavigation, NavigationScreenProps } from 'react-navigation'
 
-type Props = {
+import Utils from '@/utils'
+import { FormField, FormValue, Address, FormPurpose, Field } from '@/types'
+import { TextField } from '@/ui'
+
+type ComponentProps = {
   onSubmit: (value: FormValue) => void
   fields: FormValue
   purpose: FormPurpose
@@ -21,7 +23,9 @@ type FormMap = {
   [field: string]: FormField<any>
 }
 
-export default class Form extends Component<Props, FormMap> {
+type Props = ComponentProps & NavigationScreenProps
+
+class Form extends Component<Props, FormMap> {
   constructor(props: Props) {
     super(props)
     this.state = this.makeForm(props.fields)
@@ -41,8 +45,50 @@ export default class Form extends Component<Props, FormMap> {
     return form
   }
 
+  validateForm = (form: FormMap): boolean => {
+    let formHasErrors = false
+    Object.keys(this.state).map((fieldName: string) => {
+      const field: FormField<string | Address> = this.state[fieldName]
+      let hasError: string | false = false
+      if (typeof field.value !== 'string') {
+        hasError = this.getHasError(
+          Utils.validateAddress(
+            field.value,
+            field.validation.includes('required')
+          )
+        )
+      } else {
+        hasError = this.getHasError(
+          Utils.validateField(field.value, field.validation)
+        )
+      }
+      formHasErrors = formHasErrors || !!hasError
+      form[fieldName] = {
+        ...field,
+        hasError,
+        touched: true,
+        blurred: true,
+      }
+    })
+    if (formHasErrors) this.setState({ ...form })
+    return !formHasErrors
+  }
+
+  validateAddress = (value: Address): string | true => {
+    return 'Address is falsy'
+  }
+
   submit = () => {
-    this.props.onSubmit(this.getFormValue(this.state))
+    Keyboard.dismiss()
+    const formIsValid = this.validateForm(this.state)
+    if (formIsValid) {
+      return this.props.onSubmit(this.getFormValue(this.state))
+    }
+    Toast.show({
+      text: 'Please make sure form is filled correctly',
+      type: 'danger',
+      duration: 3000,
+    })
   }
 
   getFormValue = (form: FormMap): FormValue => {
@@ -91,7 +137,7 @@ export default class Form extends Component<Props, FormMap> {
   ) => {
     event.persist()
     const hasError = this.getHasError(
-      Utils.validateField(event.nativeEvent.text, this.state[field].validation)
+      Utils.validateField(this.state[field].value, this.state[field].validation)
     )
     this.setState({
       [field]: {
@@ -99,7 +145,7 @@ export default class Form extends Component<Props, FormMap> {
         hasError,
         blurred: true,
         touched: true,
-        value: event.nativeEvent.text,
+        // value: event.nativeEvent.text,
       },
     })
   }
@@ -107,6 +153,7 @@ export default class Form extends Component<Props, FormMap> {
   openLocation = (event: GestureResponderEvent) => {
     event.persist()
     event.stopPropagation()
+    this.props.navigation.navigate('LocationModal')
   }
 
   renderLocationField = (fieldName: string) => {
@@ -158,23 +205,27 @@ export default class Form extends Component<Props, FormMap> {
   render() {
     console.log('[Form] render')
     return (
-      <View>
+      <View style={{ marginBottom: 50 }}>
         {this.renderFields()}
         <Button
           onPress={this.submit}
-          iconRight
+          iconLeft
           block
+          success={this.props.purpose === 'create'}
+          primary={this.props.purpose === 'edit'}
           large
-          style={{ marginTop: 30, backgroundColor: '#495057' }}
+          style={{ marginTop: 30 }}
         >
-          <Text>{this.props.purpose === 'create' ? 'Create' : 'Edit'}</Text>
           <Icon
             style={{ fontSize: 15 }}
             type="FontAwesome5"
             name={this.props.purpose === 'create' ? 'plus' : 'check-circle'}
           />
+          <Text>{this.props.purpose === 'create' ? 'Create' : 'Edit'}</Text>
         </Button>
       </View>
     )
   }
 }
+
+export default withNavigation(Form)

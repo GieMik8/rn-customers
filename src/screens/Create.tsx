@@ -1,4 +1,5 @@
 import * as React from 'react'
+import { Platform } from 'react-native'
 import { connect } from 'react-redux'
 import { NavigationScreenProps } from 'react-navigation'
 import {
@@ -33,8 +34,8 @@ class CreateScreen extends React.Component<Props> {
   }
 
   createCustomer = (customer: Customer) => {
-    console.log('create', customer)
     this.props.createCustomer(customer)
+    this.props.navigation.navigate('Customers')
   }
 
   render() {
@@ -44,7 +45,10 @@ class CreateScreen extends React.Component<Props> {
           <Left>
             <Button transparent onPress={this.goBack}>
               <Icon
-                style={{ fontSize: 20, color: '#495057' }}
+                style={{
+                  fontSize: 20,
+                  color: Platform.OS === 'ios' ? '#495057' : '#FFF',
+                }}
                 name="chevron-left"
                 type="FontAwesome5"
               />

@@ -1,4 +1,5 @@
 import * as React from 'react'
+import { Platform } from 'react-native'
 import { connect } from 'react-redux'
 import { NavigationScreenProps } from 'react-navigation'
 import {
@@ -16,12 +17,15 @@ import { RootState, RootAction } from '@/store'
 import { CustomerForm } from '@/containers'
 import { Customer } from '@/types'
 import { getCustomerById } from '@/modules/customers/selectors'
+import { edit } from '@/modules/customers/actions'
 
 type StateProps = {
   customer?: Customer
 }
 
-type DispatchProps = {}
+type DispatchProps = {
+  edit: (c: Customer) => void
+}
 
 type Props = StateProps & DispatchProps & NavigationScreenProps<{ id: string }>
 
@@ -36,7 +40,8 @@ class EditScreen extends React.Component<Props> {
   }
 
   editCustomer = (customer: Customer) => {
-    console.log('edit', customer)
+    this.props.edit(customer)
+    this.props.navigation.navigate('Customers')
   }
 
   render() {
@@ -46,7 +51,10 @@ class EditScreen extends React.Component<Props> {
           <Left>
             <Button transparent onPress={this.goBack}>
               <Icon
-                style={{ fontSize: 20, color: '#495057' }}
+                style={{
+                  fontSize: 20,
+                  color: Platform.OS === 'ios' ? '#495057' : '#FFF',
+                }}
                 name="chevron-left"
                 type="FontAwesome5"
               />
@@ -74,7 +82,9 @@ const mapStateToProps = (state: RootState, props: Props): StateProps => ({
 
 const mapDispatchToProps = (
   dispatch: React.Dispatch<RootAction>
-): DispatchProps => ({})
+): DispatchProps => ({
+  edit: customer => dispatch(edit(customer)),
+})
 
 export default connect(
   mapStateToProps,

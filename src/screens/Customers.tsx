@@ -1,4 +1,5 @@
 import * as React from 'react'
+import { Platform } from 'react-native'
 import { connect } from 'react-redux'
 import { NavigationScreenProps } from 'react-navigation'
 import {
@@ -17,17 +18,17 @@ import {
 } from 'native-base'
 
 import { RootState, RootAction } from '@/store'
-import { fetchCustomers } from '@/modules/customers/actions'
 import { Customer } from '@/types'
 import { getCustomers } from '@/modules/customers/selectors'
 import { CustomersList } from '@/containers'
+import { deleteCustomer } from '@/modules/customers/actions'
 
 type StateProps = {
   customers: Customer[]
 }
 
 type DispatchProps = {
-  request: (param: string) => void
+  removeCustomer: (id: string) => void
 }
 
 type Props = StateProps & DispatchProps & NavigationScreenProps
@@ -38,7 +39,7 @@ class MainScreen extends React.Component<Props> {
   goToCreate = () => this.props.navigation.navigate('Create')
 
   removeCustomer = (id: string) => {
-    console.log('remove', id)
+    this.props.removeCustomer(id)
   }
 
   editCustomer = (id: string) => {
@@ -88,7 +89,7 @@ class MainScreen extends React.Component<Props> {
   }
 
   render() {
-    console.log(this.props.customers)
+    console.log('[Customers]', this.props.customers)
     return (
       <Container>
         <Header>
@@ -99,7 +100,10 @@ class MainScreen extends React.Component<Props> {
           <Right>
             <Button transparent onPress={this.goToCreate}>
               <Icon
-                style={{ fontSize: 20, color: '#495057' }}
+                style={{
+                  fontSize: 20,
+                  color: Platform.OS === 'ios' ? '#495057' : '#FFF',
+                }}
                 name="user-plus"
                 type="FontAwesome5"
               />
@@ -112,10 +116,7 @@ class MainScreen extends React.Component<Props> {
         <Footer>
           <FooterTab>
             <Button full>
-              <Text>
-                Swipe right to <Text style={{ color: 'blue' }}>edit</Text>{' '}
-                customer, left to <Text style={{ color: 'red' }}>delete</Text>
-              </Text>
+              <Text>Swipe right to edit customer, left to delete</Text>
             </Button>
           </FooterTab>
         </Footer>
@@ -131,7 +132,7 @@ const mapStateToProps = (state: RootState): StateProps => ({
 const mapDispatchToProps = (
   dispatch: React.Dispatch<RootAction>
 ): DispatchProps => ({
-  request: param => dispatch(fetchCustomers.request(param)),
+  removeCustomer: (id: string) => dispatch(deleteCustomer(id)),
 })
 
 export default connect(

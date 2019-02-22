@@ -10,7 +10,7 @@
     "esModuleInterop": true,
     "isolatedModules": true,
     "jsx": "react",
-    "lib": ["es6", "dom"],
+    "lib": ["es7", "dom"],
     "moduleResolution": "node",
     "noEmit": true,
     "strict": true,

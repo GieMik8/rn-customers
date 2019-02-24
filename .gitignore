@@ -10,4 +10,4 @@ gradle.properties
 android/app/my-release-key.keystore
 
 # Secrets
-# .env
+.env

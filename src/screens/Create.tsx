@@ -29,10 +29,6 @@ type Props = StateProps & DispatchProps & NavigationScreenProps
 class CreateScreen extends React.Component<Props> {
   goBack = () => this.props.navigation.goBack()
 
-  openLocationModal = () => {
-    this.props.navigation.navigate('LocationModal')
-  }
-
   createCustomer = (customer: Customer) => {
     this.props.createCustomer(customer)
     this.props.navigation.navigate('Customers')

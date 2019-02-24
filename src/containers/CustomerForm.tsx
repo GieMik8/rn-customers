@@ -22,43 +22,43 @@ export default class CustomerForm extends Component<Props, State> {
     this.state = {
       purpose: props.customer ? 'edit' : 'create',
       customer: initialCustomer,
-      initialForm: [
-        new Field<string>(
+      initialForm: {
+        name: new Field<string>(
           'name',
           initialCustomer.name,
           'text',
           ['required', 'text', { minLength: 3 }],
           'Name'
         ),
-        new Field<string>(
+        surname: new Field<string>(
           'surname',
           initialCustomer.surname,
           'text',
           ['required', 'text', { minLength: 3 }],
           'Surname'
         ),
-        new Field<string>(
+        email: new Field<string>(
           'email',
           initialCustomer.email,
           'text',
           ['required', 'email', { minLength: 3 }],
           'Email'
         ),
-        new Field<Address>(
+        address: new Field<Address>(
           'address',
           initialCustomer.address,
           'location',
           [],
           'Address'
         ),
-      ],
+      },
     }
   }
 
   submit = (form: FormValue) => {
     const map: any = {}
-    form.map((field: Field<string | Address>) => {
-      map[field.name] = field.value
+    Object.keys(form).forEach((fieldName: string) => {
+      map[fieldName] = form[fieldName].value
     })
     this.props.onSubmit(
       new Customer(

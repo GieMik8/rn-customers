@@ -3,7 +3,6 @@ import { View, Icon, Button, Text, Toast } from 'native-base'
 import {
   NativeSyntheticEvent,
   TextInputFocusEventData,
-  GestureResponderEvent,
   TouchableOpacity,
   Keyboard,
 } from 'react-native'
@@ -31,17 +30,23 @@ class Form extends Component<Props, FormMap> {
     this.state = this.makeForm(props.fields)
   }
 
+  componentWillReceiveProps(nextProps: Props) {
+    this.setState(this.makeForm(nextProps.fields))
+    return false
+  }
+
   makeForm = (fields: FormValue): FormMap => {
     const form: FormMap = {}
-    for (const field of fields) {
-      form[field.name] = new FormField<Address | string>(
+    Object.keys(fields).map(fieldName => {
+      const field = fields[fieldName]
+      form[fieldName] = new FormField<Address | string>(
         field.value,
         field.type,
         field.name,
         field.validation,
         field.placeholder
       )
-    }
+    })
     return form
   }
 
@@ -50,7 +55,7 @@ class Form extends Component<Props, FormMap> {
     Object.keys(this.state).map((fieldName: string) => {
       const field: FormField<string | Address> = this.state[fieldName]
       let hasError: string | false = false
-      if (typeof field.value !== 'string') {
+      if (field.value && typeof field.value !== 'string') {
         hasError = this.getHasError(
           Utils.validateAddress(
             field.value,
@@ -92,11 +97,13 @@ class Form extends Component<Props, FormMap> {
   }
 
   getFormValue = (form: FormMap): FormValue => {
-    const formValue: FormValue = []
+    const formValue: FormValue = {}
     Object.keys(form).map((fieldName: string) => {
       const field: FormField<string | Address> = form[fieldName]
-      formValue.push(
-        new Field<string | Address>(field.name, field.value, field.type)
+      formValue[fieldName] = new Field<string | Address>(
+        field.name,
+        field.value,
+        field.type
       )
     })
     return formValue
@@ -117,7 +124,10 @@ class Form extends Component<Props, FormMap> {
     return hasError
   }
 
-  onInput = (field: string, text: string) => {
+  onInput = (field: string, text: string, quietly?: boolean) => {
+    if (quietly) {
+      return this.setState({ [field]: { ...this.state[field], value: text } })
+    }
     const hasError = this.getHasError(
       Utils.validateField(text, this.state[field].validation)
     )
@@ -145,31 +155,33 @@ class Form extends Component<Props, FormMap> {
         hasError,
         blurred: true,
         touched: true,
-        // value: event.nativeEvent.text,
       },
     })
   }
 
-  openLocation = (event: GestureResponderEvent) => {
-    event.persist()
-    event.stopPropagation()
-    this.props.navigation.navigate('LocationModal')
+  onAddressConfirm = (address: Address) => {
+    this.setState({ address: { ...this.state.address, value: address } })
   }
 
-  renderLocationField = (fieldName: string) => {
+  openLocation = (address: Address) => {
+    this.props.navigation.navigate('LocationModal', {
+      address,
+      onSubmitAddress: this.onAddressConfirm,
+    })
+  }
+
+  renderAddressField = (fieldName: string) => {
     const field: FormField<Address> = this.state[fieldName]
-    const location = []
-    if (field.value.city) location.push(field.value.city)
-    if (field.value.street) location.push(field.value.city)
-    if (field.value.houseNumber) location.push(field.value.houseNumber)
-    if (field.value.zipCode) location.push(field.value.zipCode)
     return (
-      <TouchableOpacity activeOpacity={0.8} onPress={this.openLocation}>
+      <TouchableOpacity
+        activeOpacity={0.8}
+        onPress={this.openLocation.bind(this, field.value)}
+      >
         <View pointerEvents="none">
           <TextField
             touched={field.touched}
             blurred={field.blurred}
-            value={location.join(', ')}
+            value={field.value.readable}
             hasError={field.hasError}
             placeholder={field.placeholder}
           />
@@ -197,7 +209,7 @@ class Form extends Component<Props, FormMap> {
     Object.keys(this.state).map(fieldName => (
       <View key={fieldName}>
         {this.state[fieldName].type === 'location'
-          ? this.renderLocationField(fieldName)
+          ? this.renderAddressField(fieldName)
           : this.renderTextField(fieldName)}
       </View>
     ))

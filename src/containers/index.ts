@@ -1,3 +1,5 @@
 export { default as CustomersList } from './CustomersList'
 export { default as CustomerForm } from './CustomerForm'
 export { default as Form } from './Form'
+export { default as AddressSearch } from './AddressSearch'
+export { default as AddressForm } from './AddressForm'

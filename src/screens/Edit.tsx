@@ -30,14 +30,7 @@ type DispatchProps = {
 type Props = StateProps & DispatchProps & NavigationScreenProps<{ id: string }>
 
 class EditScreen extends React.Component<Props> {
-  componentDidMount() {
-    console.log(this.props.customer)
-  }
   goBack = () => this.props.navigation.goBack()
-
-  openLocationModal = () => {
-    this.props.navigation.navigate('LocationModal')
-  }
 
   editCustomer = (customer: Customer) => {
     this.props.edit(customer)

@@ -16,7 +16,7 @@ class Validator {
 
   public isString = (value: any): boolean => _.isString(value)
 
-  public isNumber = (value: any): boolean => _.isNumber(value)
+  public isNumber = (value: any): boolean => _.isFinite(+value)
 
   public isEmpty = (value: any): boolean => _.isEmpty(value)
 
@@ -33,22 +33,29 @@ class Validator {
   ): true | string => {
     switch (type) {
       case 'email':
-        if (this.isEmail(value)) return true
+        if (this.isEmpty(value) || this.isEmail(value)) return true
         return 'Email is not valid'
       case 'required':
         if (!this.isEmpty(value)) return true
         return 'Field is required'
       case 'number':
-        if (this.isNumber(value)) return true
+        console.log(this.isEmpty(value), this.isNumber(value), value, +value)
+        if (this.isEmpty(value) || this.isNumber(value)) return true
         return "This field's value must be a number"
       case 'text':
-        if (this.isString(value)) return true
+        if (this.isEmpty(value) || this.isString(value)) return true
         return "This field's value must be text"
       case 'max':
-        if (this.maxLength(value, options.maxLength)) return true
+        if (this.isEmpty(value)) return true
+        if (this.maxLength(value, options.maxLength)) {
+          return true
+        }
         return `Field\'s values is too long (${options.maxLength})`
       case 'min':
-        if (this.minLength(value, options.minLength)) return true
+        if (this.isEmpty(value)) return true
+        if (this.minLength(value, options.minLength)) {
+          return true
+        }
         return `Field\'s value is too short (${options.minLength})`
       default:
         return true
@@ -76,20 +83,20 @@ class Validator {
     let validated: string | true = true
     for (const validation of validations) {
       let type: ValidationType = 'default'
-      let option: ValidationMapType = { minLength: 0 }
+      let options: ValidationMapType = { minLength: 0 }
       if (typeof validation !== 'object') {
         type = validation
       } else {
         if (validation.hasOwnProperty('minLength')) {
           type = 'min'
-          option = validation
+          options = validation
         }
         if (validation.hasOwnProperty('maxLength')) {
           type = 'max'
-          option = validation
+          options = validation
         }
       }
-      validated = this.getValidated(value, type, option)
+      validated = this.getValidated(value, type, options)
       if (typeof validated === 'string') break // Note: means not valid
     }
     return validated

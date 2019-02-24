@@ -1,20 +1,39 @@
+import { AddressType, PlaceType2, PlaceType1 } from '@google/maps'
+
 import Utils from '@/utils'
+
+type Geometry = {
+  latitude: number
+  longitude: number
+}
 
 export class Address {
   city: string
   street: string
   houseNumber: string
-  zipCode?: string
+  zipCode: string
+  readable: string
+  geometry?: Geometry
+  country: string
+  placeId?: string
   constructor(
-    city: string = '',
-    street: string = '',
-    houseNumber: string = '',
-    zipCode: string = ''
+    city?: string,
+    street?: string,
+    houseNumber?: string,
+    zipCode?: string,
+    readable?: string,
+    country?: string,
+    geometry?: Geometry,
+    placeId?: string
   ) {
-    this.city = city
-    this.street = street
-    this.houseNumber = houseNumber
-    this.zipCode = zipCode
+    this.city = city || ''
+    this.street = street || ''
+    this.houseNumber = houseNumber || ''
+    this.zipCode = zipCode || ''
+    this.readable = readable || ''
+    this.geometry = geometry
+    this.country = country || ''
+    this.placeId = placeId || ''
   }
 }
 
@@ -89,7 +108,9 @@ export class FormField<T> {
   }
 }
 
-export type FormValue = Array<Field<string | Address>>
+export type FormValue<T = string | Address> = {
+  [param: string]: Field<T>
+}
 
 export type ValidationMapType = { minLength: number } | { maxLength: number }
 
@@ -103,5 +124,7 @@ export type ValidationType =
   | 'max'
   | 'min'
   | 'default'
+
+export type AddressCompTypes = Array<PlaceType2 | AddressType | PlaceType1>
 
 export type ValidationTypes = Array<ValidationType | ValidationMapType>

@@ -6,6 +6,7 @@ import { ActionType, StateType } from 'typesafe-actions'
 import autoMergeLevel2 from 'redux-persist/es/stateReconciler/autoMergeLevel2'
 
 import Utils from '@/utils'
+import { Api } from '@/services'
 import customersReducer from '@/modules/customers/reducers'
 import customersEpics from '@/modules/customers/epics'
 import * as customersActions from '@/modules/customers/actions'
@@ -16,6 +17,7 @@ const rootActions = {
 
 export type Dependencies = {
   utils: typeof Utils
+  api: typeof Api
 }
 
 /**
@@ -33,7 +35,7 @@ const epicMiddleware = createEpicMiddleware<
   RootState,
   Dependencies
 >({
-  dependencies: { utils: Utils },
+  dependencies: { utils: Utils, api: Api },
 })
 
 declare global {

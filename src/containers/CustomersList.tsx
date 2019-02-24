@@ -40,7 +40,6 @@ export default class CustomersList extends Component<Props, State> {
   }
 
   editCustomer(id: string) {
-    console.log(id)
     this.props.onEdit(id)
   }
 
@@ -51,10 +50,7 @@ export default class CustomersList extends Component<Props, State> {
     rowMap: any
   ) {
     rowMap[`${secId}${rowId}`].props.closeRow()
-    // const newData = [...this.state.listViewData]
-    // newData.splice(+rowId, 1)
     this.removeCustomer(customer.id)
-    // this.setState({ listViewData: newData })
   }
 
   renderRow = (customer: Customer) => (

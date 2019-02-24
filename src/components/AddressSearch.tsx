@@ -55,6 +55,11 @@ export default class AddressSearch extends Component<Props, State> {
     this.search$.next(text)
   }
 
+  onBlur = () => {
+    Keyboard.dismiss()
+    this.setState({ predictions: [] })
+  }
+
   selectPrediction = (id: string) =>
     Api.geocoding
       .getInfoByPlaceId(id)
@@ -92,6 +97,7 @@ export default class AddressSearch extends Component<Props, State> {
       <View>
         <Item>
           <Input
+            onBlur={this.onBlur}
             value={this.state.searchString}
             onChangeText={this.onInput}
             placeholder="Search"

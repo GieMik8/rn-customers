@@ -89,7 +89,6 @@ class MainScreen extends React.Component<Props> {
   }
 
   render() {
-    console.log('[Customers]', this.props.customers)
     return (
       <Container>
         <Header>

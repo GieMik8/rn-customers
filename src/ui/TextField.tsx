@@ -21,7 +21,6 @@ const textField: FunctionComponent<Props> = ({
   blurred,
   onBlur,
 }) => {
-  console.log('[Field] render')
   return (
     <Fragment>
       <Item

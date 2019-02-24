@@ -5,14 +5,13 @@ import { getType, StateType } from 'typesafe-actions'
 import { normalize, denormalize } from 'normalizr'
 import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2'
 
-import Utils from '@/utils'
 import { CustomersAction } from '@/store/index'
 import { Customer } from '@/types'
 import * as actions from './actions'
 import { customerSchema } from './schemas'
 
 const plainCustomers: Customer[] = [
-  new Customer(Utils.genId(), 'Giedrius', 'Mikoliunas', 'giemik8@gmail.com'),
+  // new Customer(Utils.genId(), 'Nick', 'Nickname', 'nick@gmail.com'),
 ]
 
 type CustomerMap = {
@@ -77,8 +76,6 @@ const persistConfig = {
   storage: AsyncStorage,
   stateReconciler: autoMergeLevel2,
   whitelist: ['data', 'ui'],
-  // https://github.com/rt2zz/redux-persist/issues/824 nested whitelist doesnt work without this
-  // blacklist: ['data', 'ui'],
 }
 
 export type CustomersState = StateType<typeof customersReducer>

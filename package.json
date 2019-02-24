@@ -13,7 +13,6 @@
     "tsc": "tsc"
   },
   "dependencies": {
-    "immutable": "^4.0.0-rc.12",
     "lodash": "^4.17.11",
     "native-base": "^2.11.0",
     "normalizr": "^3.3.0",

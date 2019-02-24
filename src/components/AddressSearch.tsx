@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
-import { Header, Item, Icon, Button, Input, Text, View } from 'native-base'
+import { Keyboard } from 'react-native'
+import { Item, Icon, Input, Text, View, List, ListItem } from 'native-base'
 
 import { Api } from '@/services/index'
-import { Subject, Observable } from 'rxjs'
+import { Subject, Observable, empty } from 'rxjs'
 import {
   debounceTime,
   distinctUntilChanged,
@@ -34,7 +35,7 @@ export default class AddressSearch extends Component<Props, State> {
     this.search(this.search$).subscribe((res: PlaceAutocompleteResponse) => {
       if (res.status === 'OK') this.onAutocomplete(res.predictions)
     })
-    this.state = { searchString: '', predictions: [] }
+    this.state = { searchString: props.address.readable || '', predictions: [] }
   }
 
   onAutocomplete = (predictions: PlaceAutocompleteResult[]) => {
@@ -49,47 +50,57 @@ export default class AddressSearch extends Component<Props, State> {
     )
   }
 
-  onInput = (text: string) => this.search$.next(text)
+  onInput = (text: string) => {
+    this.setState({ searchString: text })
+    this.search$.next(text)
+  }
 
   selectPrediction = (id: string) =>
     Api.geocoding
       .getInfoByPlaceId(id)
-      .pipe(catchError(err => err))
+      .pipe(
+        catchError(err => {
+          console.log(err)
+          return empty()
+        })
+      )
       .subscribe((res: PlaceDetailsResponse) => {
         if (res.status !== 'OK') return
         const place = utils.getAddressFromDetails(res.result, id)
+        Keyboard.dismiss()
+        this.setState({ searchString: place.readable, predictions: [] })
         this.props.onFound(place)
       })
+
+  renderSearchResults = (predictions: PlaceAutocompleteResult[]) => (
+    <View style={{ backgroundColor: '#F2F2F2' }}>
+      <List>
+        {predictions.map((prediction, index) => (
+          <ListItem
+            key={index}
+            onPress={this.selectPrediction.bind(this, prediction.place_id)}
+          >
+            <Text>{prediction.description}</Text>
+          </ListItem>
+        ))}
+      </List>
+    </View>
+  )
 
   render() {
     return (
       <View>
-        <Header searchBar rounded>
-          <Item>
-            <Icon type="FontAwesome5" name="search-location" />
-            <Input onChangeText={this.onInput} placeholder="Search" />
-          </Item>
-          <Button transparent>
-            <Text>Search</Text>
-          </Button>
-        </Header>
-        <View>
-          <View>
-            {this.state.predictions.map((prediction, index) => (
-              <Button
-                transparent
-                full
-                key={index}
-                onPress={this.selectPrediction.bind(this, prediction.place_id)}
-              >
-                <Text>
-                  {index}: {prediction.description}
-                </Text>
-              </Button>
-            ))}
-          </View>
-          <Text>Selected:{this.state.searchString}</Text>
-        </View>
+        <Item>
+          <Input
+            value={this.state.searchString}
+            onChangeText={this.onInput}
+            placeholder="Search"
+          />
+          <Icon active type="FontAwesome5" name="search-location" />
+        </Item>
+        {this.state.predictions.length
+          ? this.renderSearchResults(this.state.predictions)
+          : null}
       </View>
     )
   }

@@ -39,7 +39,10 @@ export default class CustomersList extends Component<Props, State> {
     this.props.onRemove(id)
   }
 
-  editCustomer(id: string) {
+  editCustomer(id: string, secId?: ReactText, rowId?: ReactText, rowMap?: any) {
+    if (rowMap && rowId && secId) {
+      rowMap[`${secId}${rowId}`].props.closeRow()
+    }
     this.props.onEdit(id)
   }
 
@@ -60,8 +63,16 @@ export default class CustomersList extends Component<Props, State> {
     />
   )
 
-  renderLeftHiddenRow = (customer: Customer) => (
-    <Button full onPress={this.editCustomer.bind(this, customer.id)}>
+  renderLeftHiddenRow = (
+    customer: Customer,
+    secId: ReactText,
+    rowId: ReactText,
+    rowMap: object
+  ) => (
+    <Button
+      full
+      onPress={this.editCustomer.bind(this, customer.id, secId, rowId, rowMap)}
+    >
       <Icon active name="user-edit" type="FontAwesome5" />
     </Button>
   )
@@ -84,7 +95,6 @@ export default class CustomersList extends Component<Props, State> {
   }
 
   render() {
-    console.log('[CustomerList] render', this.state.listViewData)
     return (
       <View style={{ marginTop: 25, marginBottom: 55 }}>
         <List

@@ -26,7 +26,6 @@ export default class {
           }
         }
 
-        // temporary until backend has unified error response
         if (typeof data.message === 'object') {
           data.message = '[Error] - check error message'
         }

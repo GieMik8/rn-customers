@@ -9,13 +9,15 @@ import {
 import { withNavigation, NavigationScreenProps } from 'react-navigation'
 
 import Utils from '@/utils'
-import { FormField, FormValue, Address, FormPurpose, Field } from '@/types'
+import { FormField, FormValue, Address, Field } from '@/types'
 import { TextField } from '@/ui'
 
 type ComponentProps = {
   onSubmit: (value: FormValue) => void
   fields: FormValue
-  purpose: FormPurpose
+  submitButtonProps?: any
+  submitButtonIcon?: string
+  submitButtonText?: string
 }
 
 type FormMap = {
@@ -216,6 +218,11 @@ class Form extends Component<Props, FormMap> {
 
   render() {
     console.log('[Form] render')
+    const {
+      submitButtonProps,
+      submitButtonIcon = 'check-circle',
+      submitButtonText = 'Submit',
+    } = this.props
     return (
       <View style={{ marginBottom: 50 }}>
         {this.renderFields()}
@@ -223,17 +230,16 @@ class Form extends Component<Props, FormMap> {
           onPress={this.submit}
           iconLeft
           block
-          success={this.props.purpose === 'create'}
-          primary={this.props.purpose === 'edit'}
           large
           style={{ marginTop: 30 }}
+          {...submitButtonProps}
         >
           <Icon
             style={{ fontSize: 15 }}
             type="FontAwesome5"
-            name={this.props.purpose === 'create' ? 'plus' : 'check-circle'}
+            name={submitButtonIcon}
           />
-          <Text>{this.props.purpose === 'create' ? 'Create' : 'Edit'}</Text>
+          <Text>{submitButtonText}</Text>
         </Button>
       </View>
     )

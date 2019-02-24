@@ -1,5 +1,4 @@
 export { default as CustomersList } from './CustomersList'
-export { default as CustomerForm } from './CustomerForm'
-export { default as Form } from './Form'
-export { default as AddressSearch } from './AddressSearch'
-export { default as AddressForm } from './AddressForm'
+export { default as CustomerForm } from './Forms/CustomerForm'
+export { default as Form } from './Forms/Form'
+export { default as AddressForm } from './Forms/AddressForm'

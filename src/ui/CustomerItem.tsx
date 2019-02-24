@@ -1,12 +1,11 @@
 import React, { FunctionComponent } from 'react'
-import { GestureResponderEvent } from 'react-native'
 import { ListItem, Text, Body, Left, Icon } from 'native-base'
 
 import { Customer } from '@/types'
 
 type Props = {
   customer: Customer
-  onPress: (event: GestureResponderEvent) => void
+  onPress: () => void
 }
 
 const customerItem: FunctionComponent<Props> = ({ onPress, customer }) => (

@@ -74,7 +74,14 @@ export default class CustomerForm extends Component<Props, State> {
   render() {
     return (
       <Form
-        purpose={this.state.purpose}
+        submitButtonIcon={
+          this.state.purpose === 'create' ? 'plus' : 'check-circle'
+        }
+        submitButtonProps={{
+          success: this.state.purpose === 'create',
+          primary: this.state.purpose === 'edit',
+        }}
+        submitButtonText={this.state.purpose === 'create' ? 'Create' : 'Edit'}
         fields={this.state.initialForm}
         onSubmit={this.submit}
       />

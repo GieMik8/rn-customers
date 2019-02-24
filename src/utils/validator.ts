@@ -39,7 +39,6 @@ class Validator {
         if (!this.isEmpty(value)) return true
         return 'Field is required'
       case 'number':
-        console.log(this.isEmpty(value), this.isNumber(value), value, +value)
         if (this.isEmpty(value) || this.isNumber(value)) return true
         return "This field's value must be a number"
       case 'text':

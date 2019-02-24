@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
-import { View, Text } from 'native-base'
+import { View } from 'native-base'
 
-import { Form, AddressSearch } from '@/containers'
+import { AddressSearch } from '@/components'
+import { Form } from '@/containers'
 import { FormValue, Field, Address, FormPurpose } from '@/types'
 import { Api } from '@/services'
 import utils from '@/utils'
@@ -118,16 +119,21 @@ export default class AddressForm extends Component<Props, State> {
   render() {
     return (
       <View>
-        <AddressSearch
-          onFound={this.addressFound}
-          address={this.state.address}
-        />
-        <Text>{JSON.stringify(this.state.address)}</Text>
-        <Form
-          purpose={this.state.purpose}
-          fields={this.state.form}
-          onSubmit={this.submit}
-        />
+        <View style={{ marginTop: 100 }}>
+          <Form fields={this.state.form} onSubmit={this.submit} />
+        </View>
+        <View
+          style={{
+            position: 'absolute',
+            top: 0,
+            width: '100%',
+          }}
+        >
+          <AddressSearch
+            onFound={this.addressFound}
+            address={this.state.address}
+          />
+        </View>
       </View>
     )
   }

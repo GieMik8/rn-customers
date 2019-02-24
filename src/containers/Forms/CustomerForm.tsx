@@ -81,7 +81,7 @@ export default class CustomerForm extends Component<Props, State> {
           success: this.state.purpose === 'create',
           primary: this.state.purpose === 'edit',
         }}
-        submitButtonText={this.state.purpose === 'create' ? 'Create' : 'Edit'}
+        submitButtonText={this.state.purpose === 'create' ? 'Create' : 'Save'}
         fields={this.state.initialForm}
         onSubmit={this.submit}
       />

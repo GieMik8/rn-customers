@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { ListView } from 'react-native'
+import { ListView, Platform } from 'react-native'
 import {
   Text,
   View,
@@ -54,7 +54,10 @@ export default class CustomersList extends Component<Props, State> {
 
   renderCustomer = (customer: Customer) => (
     <View style={{ padding: 5, width: '50%' }}>
-      <Card style={{ minHeight: 260 }} key={customer.id}>
+      <Card
+        style={{ minHeight: Platform.OS === 'ios' ? 260 : 300 }}
+        key={customer.id}
+      >
         <CardItem header bordered>
           <Text>
             {customer.name} {customer.surname}

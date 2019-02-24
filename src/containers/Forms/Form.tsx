@@ -217,7 +217,6 @@ class Form extends Component<Props, FormMap> {
     ))
 
   render() {
-    console.log('[Form] render')
     const {
       submitButtonProps,
       submitButtonIcon = 'check-circle',

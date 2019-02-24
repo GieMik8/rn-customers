@@ -15,20 +15,23 @@ import {
   Right,
   FooterTab,
   Text,
+  Segment,
 } from 'native-base'
 
 import { RootState, RootAction } from '@/store'
 import { Customer } from '@/types'
-import { getCustomers } from '@/modules/customers/selectors'
-import { CustomersList } from '@/containers'
-import { initDeleteCustomer } from '@/modules/customers/actions'
+import { getCustomers, getGridModeEnabled } from '@/modules/customers/selectors'
+import { CustomersList, CustomersGridList } from '@/containers'
+import { initDeleteCustomer, setGridMode } from '@/modules/customers/actions'
 
 type StateProps = {
   customers: Customer[]
+  gridMode: boolean
 }
 
 type DispatchProps = {
   removeCustomer: (id: string) => void
+  setGridMode: (bool: boolean) => void
 }
 
 type Props = StateProps & DispatchProps & NavigationScreenProps
@@ -47,7 +50,7 @@ class MainScreen extends React.Component<Props> {
   }
 
   renderContent = () => {
-    const { customers } = this.props
+    const { customers, gridMode } = this.props
     if (!customers.length) {
       return (
         <Body
@@ -79,19 +82,32 @@ class MainScreen extends React.Component<Props> {
         </Body>
       )
     }
-    return (
-      <CustomersList
-        customers={customers}
-        onRemove={this.removeCustomer}
-        onEdit={this.editCustomer}
-      />
-    )
+    if (gridMode) {
+      return this.renderGridCustomers()
+    }
+    return this.renderCustomers()
   }
+
+  renderGridCustomers = () => (
+    <CustomersGridList
+      onRemove={this.removeCustomer}
+      onEdit={this.editCustomer}
+      customers={this.props.customers}
+    />
+  )
+
+  renderCustomers = () => (
+    <CustomersList
+      customers={this.props.customers}
+      onRemove={this.removeCustomer}
+      onEdit={this.editCustomer}
+    />
+  )
 
   render() {
     return (
       <Container>
-        <Header>
+        <Header hasSegment>
           <Left />
           <Body>
             <Title>Customers</Title>
@@ -109,6 +125,22 @@ class MainScreen extends React.Component<Props> {
             </Button>
           </Right>
         </Header>
+        <Segment>
+          <Button
+            first
+            active={!this.props.gridMode}
+            onPress={this.props.setGridMode.bind(this, false)}
+          >
+            <Icon type="Entypo" name="list" />
+          </Button>
+          <Button
+            last
+            active={this.props.gridMode}
+            onPress={this.props.setGridMode.bind(this, true)}
+          >
+            <Icon type="Entypo" name="grid" />
+          </Button>
+        </Segment>
         <Content contentContainerStyle={{ flexGrow: 1 }}>
           {this.renderContent()}
         </Content>
@@ -126,12 +158,14 @@ class MainScreen extends React.Component<Props> {
 
 const mapStateToProps = (state: RootState): StateProps => ({
   customers: getCustomers(state),
+  gridMode: getGridModeEnabled(state),
 })
 
 const mapDispatchToProps = (
   dispatch: React.Dispatch<RootAction>
 ): DispatchProps => ({
   removeCustomer: (id: string) => dispatch(initDeleteCustomer(id)),
+  setGridMode: bool => dispatch(setGridMode(bool)),
 })
 
 export default connect(

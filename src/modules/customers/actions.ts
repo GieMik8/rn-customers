@@ -8,3 +8,6 @@ export const initDeleteCustomer = createStandardAction(
   'customer/INIT_DELETE_CUSTOMER'
 )<string>()
 export const deleteCustomer = createStandardAction('customer/DELETE')<string>()
+export const setGridMode = createStandardAction('customers/SET_GRID_MODE')<
+  boolean
+>()

@@ -58,14 +58,21 @@ const data = (
 
 type UiState = {
   loading: boolean
+  gridMode: boolean
 }
 
 const uiState = {
   loading: false,
+  gridMode: false,
 }
 
 const ui = (state: UiState = uiState, action: CustomersAction) => {
-  return state
+  switch (action.type) {
+    case getType(actions.setGridMode):
+      return { ...state, gridMode: action.payload }
+    default:
+      return state
+  }
 }
 
 const customersReducer = combineReducers({ data, ui })

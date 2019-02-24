@@ -55,7 +55,7 @@ export default class AddressForm extends Component<Props, State> {
           'zipCode',
           initialAddress.zipCode,
           'text',
-          ['number', { minLength: 4 }],
+          ['number', { minLength: 3 }],
           'Zip code'
         ),
       },

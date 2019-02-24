@@ -9,3 +9,6 @@ export const getCustomerById = (state: RootState, customerId: string) => {
   const customers = getCustomers(state)
   return customers.find(({ id }) => id === customerId)
 }
+
+export const getGridModeEnabled = (state: RootState) =>
+  state.customers.ui.gridMode

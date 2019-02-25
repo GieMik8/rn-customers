@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View } from 'native-base'
+import { View, Toast } from 'native-base'
 
 import { AddressSearch } from '@/components'
 import { Form } from '@/containers'
@@ -62,7 +62,7 @@ export default class AddressForm extends Component<Props, State> {
     }
   }
 
-  findPlace = async (address: Address): Promise<Address> => {
+  findPlace = async (address: Address): Promise<Address | void> => {
     try {
       const search: PlaceSearchResponse = await Api.geocoding
         .saerchPlace(
@@ -71,7 +71,6 @@ export default class AddressForm extends Component<Props, State> {
         )
         .toPromise()
       if (search.status !== 'OK') {
-        throw new Error('Could not find place')
       }
       const details: PlaceDetailsResponse = await Api.geocoding
         .getInfoByPlaceId(search.results[0].place_id)
@@ -82,7 +81,13 @@ export default class AddressForm extends Component<Props, State> {
       )
       return place
     } catch (err) {
-      return new Address()
+      // return new Address()
+      console.log(err)
+      Toast.show({
+        text: 'Something wrong, check your internet',
+        type: 'danger',
+        duration: 3000,
+      })
     }
   }
 
@@ -93,6 +98,7 @@ export default class AddressForm extends Component<Props, State> {
     })
     const place = { ...this.state.address, ...map }
     const address = await this.findPlace(place)
+    if (!address) return
     this.props.onSubmit(
       new Address(
         address.city,

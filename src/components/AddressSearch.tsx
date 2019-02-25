@@ -1,6 +1,15 @@
 import React, { Component } from 'react'
 import { Keyboard } from 'react-native'
-import { Item, Icon, Input, Text, View, List, ListItem } from 'native-base'
+import {
+  Item,
+  Icon,
+  Input,
+  Text,
+  View,
+  List,
+  ListItem,
+  Toast,
+} from 'native-base'
 
 import { Api } from '@/services/index'
 import { Subject, Observable, empty } from 'rxjs'
@@ -46,7 +55,19 @@ export default class AddressSearch extends Component<Props, State> {
     return searches$.pipe(
       debounceTime(400),
       distinctUntilChanged(),
-      switchMap((term: string) => Api.geocoding.autocomplete(term))
+      switchMap((term: string) =>
+        Api.geocoding.autocomplete(term).pipe(
+          catchError(err => {
+            console.log(err)
+            Toast.show({
+              text: 'Something wrong, check your internet',
+              type: 'danger',
+              duration: 3000,
+            })
+            return empty()
+          })
+        )
+      )
     )
   }
 
@@ -66,6 +87,11 @@ export default class AddressSearch extends Component<Props, State> {
       .pipe(
         catchError(err => {
           console.log(err)
+          Toast.show({
+            text: 'Something wrong, check your internet',
+            type: 'danger',
+            duration: 3000,
+          })
           return empty()
         })
       )

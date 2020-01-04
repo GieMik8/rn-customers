@@ -2,6 +2,10 @@
 
 Example Mobile application on React Native, with Typescript, Tslint & Prettier enabled.
 
+## DEPRECATED
+
+This project is no longer maintained.
+
 ## Setup
 
 Follow instructions https://facebook.github.io/react-native/docs/getting-started and prepare environment for developing React Native mobile applications.

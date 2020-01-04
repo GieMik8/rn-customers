@@ -1,29 +1,21 @@
 import * as React from 'react'
 import { Platform } from 'react-native'
-import { connect } from 'react-redux'
 import { NavigationScreenProps } from 'react-navigation'
 import { Button, Container, Header, Icon, Right, Content } from 'native-base'
 
-import { RootState, RootAction } from '@/store'
 import { AddressForm } from '@/containers'
 import { Address } from '@/types'
 
-type StateProps = {}
-
-type DispatchProps = {}
-
-type Props = StateProps &
-  DispatchProps &
-  NavigationScreenProps<{
-    address: Address
-    onSubmitAddress: (address: Address) => void
-  }>
+type Props = NavigationScreenProps<{
+  address: Address
+  onSubmitAddress: (address: Address) => void
+}>
 
 type State = {
   address: Address
 }
 
-class LocationModal extends React.Component<Props, State> {
+export default class LocationModal extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props)
     const initialAddress = props.navigation.getParam('address') || new Address()
@@ -63,14 +55,3 @@ class LocationModal extends React.Component<Props, State> {
     )
   }
 }
-
-const mapStateToProps = (state: RootState): StateProps => ({})
-
-const mapDispatchToProps = (
-  dispatch: React.Dispatch<RootAction>
-): DispatchProps => ({})
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(LocationModal)

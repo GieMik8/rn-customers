@@ -6,7 +6,7 @@ build/
 
 # Android
 .gradle
-gradle.properties
+# gradle.properties
 android/app/my-release-key.keystore
 
 # Secrets

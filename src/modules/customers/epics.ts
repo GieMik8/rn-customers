@@ -8,9 +8,6 @@ import { RootEpic } from '@/store'
 import { deleteCustomer, initDeleteCustomer } from './actions'
 import { getCustomerById } from './selectors'
 
-const fetchCustomers: RootEpic = action$ =>
-  action$.pipe(switchMap(() => empty()))
-
 const deleteCustomerEpic: RootEpic = (action$, state$) =>
   action$.pipe(
     filter(isActionOf(initDeleteCustomer)),
@@ -45,4 +42,4 @@ const deleteCustomerEpic: RootEpic = (action$, state$) =>
     )
   )
 
-export default combineEpics(fetchCustomers, deleteCustomerEpic)
+export default combineEpics(deleteCustomerEpic)
